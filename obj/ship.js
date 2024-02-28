@@ -4,7 +4,10 @@ export default class Ship {
       this.hit = hit
   }
 
-  isHit =()=> this.hit++;
+  isHit = () => {
+    this.hit++
+    this.length--
+  };
 
   isSunk() {
       let isSunken = this.hit == this.length ? true : false;

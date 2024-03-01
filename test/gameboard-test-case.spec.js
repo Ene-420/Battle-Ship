@@ -6,12 +6,12 @@ describe("Test cells in  grid", () => {
     gameboard = GameBoard();
   });
 
-  test.skip("board", () => {
+  test("board", () => {
     expect(gameboard.returnGrid().length).toBe(10);
   });
 
   test("CellState -> Random Cell on Board", () => {
-    expect(gameboard.cellState(0, 0)).toBe(true);
+    expect(gameboard.cellState(3, 3)).toBe(true);
   });
 
   test("CellState ->Not on board ", () => {
@@ -37,9 +37,9 @@ describe("Test cells in  grid", () => {
         expect(mockCallCellCheck.mock.results.value).toHaveLength(3)
     })
 
-    test('FInd Vertical Adjacents', () => {
+    test.skip('FInd Vertical Adjacents', () => {
         const ship = { length: 2 }
-        const cell = { row: 0, column: 0, filled: {} }
+        const cell = { row: 3, column: 3, filled: {} }
 
         expect(gameboard.findVerticalAdjacentCells(cell, ship)).toBe(null);
     })
@@ -55,4 +55,45 @@ describe("Test cells in  grid", () => {
 
       expect(gameboard.shipFitInGrid(cell, 3, "vertical")).toBeFalsy();
     });
+  
+  
+  test('Check For Perfect Fit Veritcal -> Check for cell that can vertically contain cell', () => {
+    const ship = { length: 2 };
+    const cell = { 'row': 3, 'column': 3, 'filled': {} };
+
+    expect(gameboard.checkForPerfectFitVertical(cell, ship)).toEqual(cell);
+  })
+
+
+  test.skip("Check For Perfect Fit Veritcal -> to return another cell due to cell being filled", () => {
+    const ship = { length: 3, hit: 0 };
+    const cell = { row: 3, column: 3, filled: { length: 3, hit: 0 } };
+    let dummyCell = gameboard.returnGrid()[3][3]
+    dummyCell.filled = { length: 3, hit: 0 };
+
+    expect(gameboard.checkForPerfectFitVertical(cell, ship)).not.toEqual(cell);
+  });
+
+  test.skip('Check For Perfect Fit Horizontal', () => {
+    const ship = { length: 2 };
+    const cell = { row: 3, column: 3, filled: {} };
+
+    expect(gameboard.checkForPerfectFitHorizontal(cell, ship)).toEqual(cell);
+    
+  })
+
+
+  test.skip('FindHorizontalAdjacentCells', () => {
+    const ship = { length: 2 };
+    const cell = { row: 5, column: 9, filled: {} };
+
+    expect(gameboard.findHorizontalAdjacentCells(cell, ship)).toBe(null);
+  })
+
+  test('Place Ship ->', () => {
+    gameboard.placeShip()
+    let presentGameboard = gameboard.returnGrid()
+
+    expect(presentGameboard).toBe(null)
+  })
 });

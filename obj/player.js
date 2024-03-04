@@ -1,14 +1,14 @@
-class Player {
+export class Player {
   constructor(name) {
     this.name = name;
-    this.player = "Human";
+    this.player = 'Human';
   }
 }
 
-class Computer extends Player {
+export class Computer {
   plays = [];
-  super(name) {
-    this.name = name;
+  constructor(name) {
+    this.name = name
     this.player = "Computer";
   }
 

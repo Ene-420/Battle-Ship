@@ -60,8 +60,9 @@ export const GameBoard = () => {
   }
 
   function checkSunkenShips() {
-    let filledCells = grid.filter((cell) => Object.keys(cell.filled));
-    return filledCells.every((ship) => ship.isSunken());
+    let filledCells = grid.filter((cell) => Object.keys(cell.filled).length > 0);
+    if (filledCells.length > 0) return filledCells.every((ship) => ship.filled.isSunk());
+    else return false
   }
 
   //check for cells that can contain ship

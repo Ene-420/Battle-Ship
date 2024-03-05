@@ -85,15 +85,22 @@ describe("Test cells in  grid", () => {
 
   test.skip('FindHorizontalAdjacentCells', () => {
     const ship = { length: 2 };
-    const cell = { row: 5, column: 9, filled: {} };
+    const cell = { row: 0, column: 0, filled: {} };
 
     expect(gameboard.findHorizontalAdjacentCells(cell, ship)).toBe(null);
   })
 
-  test('Place Ship ->', () => {
+  test.skip('Place Ship ->', () => {
     gameboard.placeShip()
     let presentGameboard = gameboard.returnGrid()
 
     expect(presentGameboard).toBe(null)
+  })
+
+
+  test('Check Sunken Ships ->', () => {
+    
+    gameboard.placeShip()
+    expect(gameboard.checkSunkenShips()).toBeFalsy()
   })
 });

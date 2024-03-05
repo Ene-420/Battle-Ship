@@ -15,6 +15,7 @@
 }
 .ship-row{
     display: flex;
+    min-height: 50px;
     flex: auto;
 }
 
@@ -23,6 +24,8 @@
     min-width: 10%;
     min-height: 10%;
     flex: auto;
+    
+    padding: 2px;
 }
 
 .ship-cell{
@@ -32,12 +35,12 @@
 
 .no-ship-cell-hit{
     display: flex;
-    align-items: center;
-    justify-content: center;
+    margin: 0 auto;
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background-color: rgb(46, 46, 46);
+    padding: 2px;
 }
 
 .ship-cell-hit{

@@ -39,7 +39,7 @@ export const displayControls = (callback) => {
           const played = document.createElement("span");
           played.classList.add("no-ship-cell-hit");
           event.target.append(played);
-          return true;
+          return false;
           //event.target.classList.add("no-ship-cell-hit");
         }
       }
@@ -59,7 +59,7 @@ export const displayControlsComputer = (value, callback) => {
         const played = document.createElement("span");
         played.classList.add("no-ship-cell-hit");
         compChosenCell.append(played);
-        return true;
+        return false;
       }
     }
   }

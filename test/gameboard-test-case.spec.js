@@ -103,4 +103,11 @@ describe("Test cells in  grid", () => {
     gameboard.placeShip()
     expect(gameboard.checkSunkenShips()).toBeFalsy()
   })
+
+  test('Find Diagonal ->', () => {
+    //gameboard.placeShip()
+    const cell = { row: 1, column: 2, filled: {} };
+
+    expect(gameboard.findDiagonals(cell)).toEqual([[0,3],[0,1],[2,1],[2,3]])
+  })
 });

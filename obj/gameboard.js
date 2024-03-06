@@ -3,6 +3,7 @@ import Ship from "./ship";
 export const GameBoard = () => {
   let grid = [];
   let adjacentCells = [];
+  let filledCells = [];
   const shipPlacements = [
     { length: 4, count: 1 },
     { length: 3, count: 2 },
@@ -38,20 +39,24 @@ export const GameBoard = () => {
         if (shipDirection === 1) {
           let foundSpace = checkForPerfectFitVertical(newCell, ship);
           let { row, column } = foundSpace;
+          let newShip = new Ship(ship.length);
           //console.log({foundSpace})
           for (let i = 0; i < ship.length; i++) {
-            grid[row][column].filled = new Ship(ship.length);
+            grid[row][column].filled = newShip;
             adjacentCells.push([row, column]);
+            filledCells.push(grid[row][column]);
             column++;
           }
         } else {
           let foundSpace = checkForPerfectFitHorizontal(newCell, ship);
           let { row, column } = foundSpace;
+          let newShip = new Ship(ship.length);
           //console.log({ foundSpace });
           for (let i = 0; i < ship.length; i++) {
             //console.log({foundSpace})
-            grid[row][column].filled = new Ship(ship.length);
+            grid[row][column].filled = newShip;
             adjacentCells.push([row, column]);
+            filledCells.push(grid[row][column]);
             row++;
           }
         }
@@ -60,9 +65,10 @@ export const GameBoard = () => {
   }
 
   function checkSunkenShips() {
-    let filledCells = grid.filter((cell) => Object.keys(cell.filled).length > 0);
-    if (filledCells.length > 0) return filledCells.every((ship) => ship.filled.isSunk());
-    else return false
+    console.log(filledCells);
+    if (filledCells.length > 0)
+      return filledCells.every((ship) => ship.filled.isSunk());
+    else return false;
   }
 
   //check for cells that can contain ship
@@ -124,7 +130,7 @@ export const GameBoard = () => {
       return true;
     } else {
       cellState.hit = true;
-      return true
+      return true;
     }
   }
 
@@ -260,6 +266,17 @@ export const GameBoard = () => {
     return adjacentCells.filter((word) => checkCell(word[0], word[1]) === true);
   }
 
+  function findDiagonals(cell) {
+    let row = cell.row,
+      column = cell.column;
+
+    return [
+      [row - 1, column + 1],
+      [row - 1, column - 1],
+      [row + 1, column - 1],
+      [row + 1, column + 1],
+    ].filter((grid) => checkCell(grid[0], grid[1]) === true);
+  }
   function findHorizontalAdjacentCells(cell, ship) {
     const { up, down, front, back } = directionOperations().horizontal;
     let adjacentCells = [];
@@ -343,6 +360,7 @@ export const GameBoard = () => {
     checkForPerfectFitHorizontal,
     findHorizontalAdjacentCells,
     placeShip,
+    findDiagonals
   };
 };
 

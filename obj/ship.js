@@ -4,7 +4,7 @@ export default class Ship {
       this.hit = hit
   }
 
-  isHit = () => {
+  isHit(){
     this.hit++
     this.length--
   };

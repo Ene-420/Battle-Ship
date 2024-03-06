@@ -13,15 +13,18 @@ const screen = () => {
       if (currentPlayer.player === "Human") {
           if (displayControls(gameBoard.recieveAttack)) {
             
-          currentPlayer = switchCurrentPlayer();
-        }
+         
+          }
+        else  currentPlayer = switchCurrentPlayer();
       }
 
       else if (currentPlayer.player === 'Computer') {
           let {row, column} = currentPlayer.makePlay()
-          if (displayControlsComputer(`${row}${column}`)) {
-             currentPlayer = switchCurrentPlayer()
-         }
+          if (
+            displayControlsComputer(`${row}${column}`, gameBoard.recieveAttack)
+          ) {
+            //currentPlayer = switchCurrentPlayer()
+          } else currentPlayer = switchCurrentPlayer();
       }
   }
 

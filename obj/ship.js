@@ -1,17 +1,43 @@
 export default class Ship {
-  constructor(length = 1, hit = 0, sunk = false) {
-      this.length = length;
-      this.hit = hit
+  head = null;
+  constructor(value, length = 1, direction) {
+    this.head =  value;
+    this.length = length;
+    this.hit = 0;
+    this.sunk = false;
+    this.direction = direction;
   }
 
-  isHit(){
-    this.hit++
+  append(value) {
+    if (!this.head) {
+      this.head = Node(value);
+    }
+    let next = this.head;
+    while (next.nextNode !== null) {
+      next = next.nextNode;
+    }
+    return next.nextNode = new Node(value);
+
+  }
+
+  getHead() {
+    return this.head;
+  }
+  isHit() {
+    this.hit++;
     //this.length--
-  };
+  }
 
   isSunk() {
-      let isSunken = this.hit == this.length ? true : false;
-      this.sunk = isSunken
-      return isSunken
+    let isSunken = this.hit == this.length ? true : false;
+    this.sunk = isSunken;
+    return isSunken;
   }
 }
+
+// class Node {
+//   constructor(value = null, nextNode = null) {
+//     this.value = value;
+//     this.nextNode = nextNode;
+//   }
+// }

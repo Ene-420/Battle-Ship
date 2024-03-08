@@ -39,7 +39,7 @@ export const GameBoard = () => {
         if (shipDirection === 1) {
           let foundSpace = checkForPerfectFitVertical(newCell, ship);
           let { row, column } = foundSpace;
-          let newShip = new Ship(ship.length);
+          let newShip = new Ship([row, column], ship.length, "vertical");
           //console.log({foundSpace})
           for (let i = 0; i < ship.length; i++) {
             grid[row][column].filled = newShip;
@@ -50,7 +50,7 @@ export const GameBoard = () => {
         } else {
           let foundSpace = checkForPerfectFitHorizontal(newCell, ship);
           let { row, column } = foundSpace;
-          let newShip = new Ship(ship.length);
+          let newShip = new Ship([row, column], ship.length, "horizontal");
           //console.log({ foundSpace });
           for (let i = 0; i < ship.length; i++) {
             //console.log({foundSpace})
@@ -122,17 +122,39 @@ export const GameBoard = () => {
   }
   function receiveAttack(row, column) {
     const cell = grid[row][column];
-    console.log({cell})
+    console.log({ cell });
 
     if (!cellState(row, column)) {
       let attackedShip = cell.filled;
+      let shipHead = grid[attackedShip.getHead()[0]][attackedShip.getHead()[1]];
 
       attackedShip.isHit();
-     
-      cell.attacked = true;
-      const diagonals = findDiagonals(cell)
-      diagonals.forEach(item =>  receiveAttack(item[0], item[1]))
-      return diagonals;
+      if (attackedShip.isSunk()) {
+        if (attackedShip.direction === "vertical") {
+          let adjacents = findVerticalAdjacentCells(shipHead, attackedShip);
+          let notHitCell = adjacents.filter(
+            (item) =>
+              isCellHit(item[0], item[1]) === false &&
+              cellState(item[0], item[1]) === true,
+          );
+          notHitCell.forEach((item) => receiveAttack(item[0], item[1]));
+          return notHitCell;
+        } else if (attackedShip.direction === "horizontal") {
+          let adjacents = findHorizontalAdjacentCells(shipHead, attackedShip);
+          let notHitCell = adjacents.filter(
+            (item) =>
+              isCellHit(item[0], item[1]) === false &&
+              cellState(item[0], item[1]) === true,
+          );
+          notHitCell.forEach((item) => receiveAttack(item[0], item[1]));
+          return notHitCell;
+        }
+      } else {
+        cell.attacked = true;
+        const diagonals = findDiagonals(cell);
+        diagonals.forEach((item) => receiveAttack(item[0], item[1]));
+        return diagonals;
+      }
     } else {
       cell.attacked = true;
       return true;
@@ -272,9 +294,9 @@ export const GameBoard = () => {
   }
 
   function isCellHit(row, column) {
-    let cell = grid[row][column]
-    if (cell.attacked) return true
-    else return false
+    let cell = grid[row][column];
+    if (cell.attacked) return true;
+    else return false;
   }
 
   function findDiagonals(cell) {
@@ -376,7 +398,7 @@ export const GameBoard = () => {
     checkForPerfectFitHorizontal,
     findHorizontalAdjacentCells,
     placeShip,
-    findDiagonals
+    findDiagonals,
   };
 };
 
@@ -385,7 +407,7 @@ class Cell {
     this.column = column;
     this.row = row;
     this.filled = filled;
-    this.attacked = false
+    this.attacked = false;
   }
 
   // fillCell() {

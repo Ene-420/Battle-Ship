@@ -26,13 +26,29 @@ export const GameDisplay = (elements) => {
 export const displayControls = (callback) => {
   const gameBoard = document.querySelector(".gameboard");
 
-  gameBoard.addEventListener("click", (event) => {
+  gameBoard.onclick =function(event){
     if (event.target.tagName === "BUTTON") {
       let cellNumber = event.target.dataset.cellNo.split("");
-      if (callback(~~cellNumber[0], ~~cellNumber[1])) {
+      const diagonalCell = callback(~~cellNumber[0], ~~cellNumber[1]);
+      if (diagonalCell) {
         if (event.target.classList.contains("ship-cell")) {
           //event.target.classList.remove('ship-cell')
           event.target.classList.add("ship-cell-hit");
+          console.log({ diagonalCell });
+          if (diagonalCell.length > 0) {
+            console.log({ diagonalCell });
+            for (let cell of diagonalCell) {
+              let emptyDiagonalCell = gameBoard.querySelector(
+                `[data-cell-no = '${cell[0]}${cell[1]}']`,
+              );
+              console.log({ emptyDiagonalCell });
+              if (emptyDiagonalCell) {
+                const border = document.createElement("span");
+                border.classList.add("no-ship-border-cell-hit");
+                emptyDiagonalCell.append(border);
+              }
+            }
+          }
           return true;
         } else if (event.target.classList.contains("no-ship-cell")) {
           //event.target.classList.remove("no-ship-cell");
@@ -44,13 +60,13 @@ export const displayControls = (callback) => {
         }
       }
     }
-  });
+  };
 };
 
 export const displayControlsComputer = (value, callback) => {
-  const compChosenCell = document.querySelector(`[data-cell-no] = ${value}`);
-    if (compChosenCell) {
-      const splitValue = value.split('')
+  const compChosenCell = document.querySelector(`[data-cell-no = '${value}']`);
+  if (compChosenCell) {
+    const splitValue = value.split("");
     if (callback(~~splitValue[0], ~~splitValue[1])) {
       if (compChosenCell.classList.contains("ship-cell")) {
         compChosenCell.classList.add("ship-cell-hit");

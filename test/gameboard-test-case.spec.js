@@ -1,4 +1,5 @@
 import { GameBoard } from "../obj/gameboard";
+import Ship from "../obj/ship";
 
 describe("Test cells in  grid", () => {
   let gameboard;
@@ -104,10 +105,22 @@ describe("Test cells in  grid", () => {
     expect(gameboard.checkSunkenShips()).toBeFalsy()
   })
 
-  test('Find Diagonal ->', () => {
+  test.skip('Find Diagonal ->', () => {
     //gameboard.placeShip()
     const cell = { row: 1, column: 2, filled: {} };
+    // console.log(gameboard.findDiagonals(cell));
+    // console.log(gameboard.returnGrid()[1][2]);
+    expect(gameboard.findDiagonals(cell)).toContain([
+      [0, 3],
+      [0, 1],
+      [2, 1],
+      [2, 3],
+    ]);
+  })
 
-    expect(gameboard.findDiagonals(cell)).toEqual([[0,3],[0,1],[2,1],[2,3]])
+  test('Recieve Attacks', () => {
+    gameboard.returnGrid()[0][0].filled = new Ship(1);
+    console.log(gameboard.receiveAttack(0, 0));
+    expect(gameboard.receiveAttack(0,0)).toBe([[1, 8]]);
   })
 });

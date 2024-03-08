@@ -33,7 +33,7 @@
     background-color:rgb(134, 134, 221) ;
 }
 
-.no-ship-cell-hit{
+.no-ship-cell-hit, .no-ship-border-cell-hit{
     display: flex;
     margin: 0 auto;
     width: 10px;
@@ -41,6 +41,10 @@
     border-radius: 50%;
     background-color: rgb(46, 46, 46);
     padding: 2px;
+}
+
+.no-ship-border-cell-hit{
+    background-color: grey;
 }
 
 .ship-cell-hit{

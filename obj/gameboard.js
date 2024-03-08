@@ -18,7 +18,7 @@ export const GameBoard = () => {
     const row = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     const column = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-    for (let i = row.length - 1; i >= 0; i--) {
+    for (let i = 0; i < row.length; i++) {
       let rowItem = [];
       for (let x = 0; x < column.length; x++) {
         let newCell = new Cell(row[i], column[x]);
@@ -65,7 +65,7 @@ export const GameBoard = () => {
   }
 
   function checkSunkenShips() {
-    console.log(filledCells);
+    //console.log(filledCells);
     if (filledCells.length > 0)
       return filledCells.every((ship) => ship.filled.isSunk());
     else return false;
@@ -121,15 +121,20 @@ export const GameBoard = () => {
     }
   }
   function receiveAttack(row, column) {
-    const cellState = grid[row][column];
+    const cell = grid[row][column];
+    console.log({cell})
 
-    if (Object.keys(cellState.filled).length > 0) {
-      let attackedShip = cellState.filled;
+    if (!cellState(row, column)) {
+      let attackedShip = cell.filled;
 
       attackedShip.isHit();
-      return true;
+     
+      cell.attacked = true;
+      const diagonals = findDiagonals(cell)
+      diagonals.forEach(item =>  receiveAttack(item[0], item[1]))
+      return diagonals;
     } else {
-      cellState.hit = true;
+      cell.attacked = true;
       return true;
     }
   }
@@ -266,6 +271,12 @@ export const GameBoard = () => {
     return adjacentCells.filter((word) => checkCell(word[0], word[1]) === true);
   }
 
+  function isCellHit(row, column) {
+    let cell = grid[row][column]
+    if (cell.attacked) return true
+    else return false
+  }
+
   function findDiagonals(cell) {
     let row = cell.row,
       column = cell.column;
@@ -275,7 +286,12 @@ export const GameBoard = () => {
       [row - 1, column - 1],
       [row + 1, column - 1],
       [row + 1, column + 1],
-    ].filter((grid) => checkCell(grid[0], grid[1]) === true);
+    ].filter(
+      (grid) =>
+        checkCell(grid[0], grid[1]) === true &&
+        isCellHit(grid[0], grid[1]) === false &&
+        cellState(grid[0], grid[1]) === true,
+    );
   }
   function findHorizontalAdjacentCells(cell, ship) {
     const { up, down, front, back } = directionOperations().horizontal;
@@ -365,10 +381,11 @@ export const GameBoard = () => {
 };
 
 class Cell {
-  constructor(row, column, filled = {}, hit = false) {
+  constructor(row, column, filled = {}) {
     this.column = column;
     this.row = row;
     this.filled = filled;
+    this.attacked = false
   }
 
   // fillCell() {

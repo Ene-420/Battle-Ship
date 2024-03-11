@@ -1,44 +1,48 @@
 import { Computer, Player } from "../obj/player";
-import { displayControls, displayControlsComputer } from "./display";
+import { GameDisplay, displayControls, displayControlsComputer } from "./display";
 import { GameBoard } from "../obj/gameboard";
 
-const screen = () => {
-    function play() {
-       const {gameBoard}=init()
-    
-        let { currentPlayer, switchCurrentPlayer } = switchPlay();
-        let shipStatus = gameBoard.checkSunkenShips()
-    //const {switchCurrentPlayer} = switchPlay
-    while (trushipe)
-      if (currentPlayer.player === "Human") {
-          if (displayControls(gameBoard.recieveAttack)) {
-            
-         
-          }
-        else  currentPlayer = switchCurrentPlayer();
-      }
+export const screen = () => {
+   function play() {
+    const { playerGameBoard, computerGameboard } = init();
 
-      else if (currentPlayer.player === 'Computer') {
-          let {row, column} = currentPlayer.makePlay()
-          if (
-            displayControlsComputer(`${row}${column}`, gameBoard.recieveAttack)
-          ) {
-            //currentPlayer = switchCurrentPlayer()
-          } else currentPlayer = switchCurrentPlayer();
+    let { currentPlayer, switchCurrentPlayer } = switchPlay();
+    let shipStatus = false;
+    //const {switchCurrentPlayer} = switchPlay
+    while (!shipStatus)
+      if (currentPlayer.player === "Human") {
+        const hasPlayerPlayed =  displayControls(computerGameboard.receiveAttack)
+        if (hasPlayerPlayed) {
+
+        } else if (hasPlayerPlayed === false) currentPlayer = switchCurrentPlayer();
+      } else if (currentPlayer.player === "Computer") {
+        let { row, column } = currentPlayer.makePlay();
+        if (
+          displayControlsComputer(`${row}${column}`, playerGameBoard.receiveAttack)
+        ) {
+          //currentPlayer = switchCurrentPlayer()
+        } else currentPlayer = switchCurrentPlayer();
       }
+    
   }
 
   function init() {
     const body = document.querySelector("body");
     const content = document.createElement("main");
+    const {playerBoard, computerBoard}= GameDisplay()
     body.append(content);
-    let gameBoard = GameBoard();
-    gameBoard.placeShip();
+    let playerGameBoard = GameBoard(), computerGameboard = GameBoard();
+    playerGameBoard.placeShip();
+    computerGameboard.placeShip()
 
-    console.log(gameBoard.returnGrid());
-      content.append(GameDisplay(gameBoard.returnGrid()));
-      return gameBoard
+    console.log(playerGameBoard.returnGrid());
+    console.log(computerGameboard.returnGrid());
+
+    content.append(playerBoard(playerGameBoard.returnGrid()), computerBoard(computerGameboard.returnGrid()));
+    return {computerGameboard, playerGameBoard};
   }
+
+  return {play}
 };
 
 function switchPlay() {

@@ -1,30 +1,62 @@
-export const GameDisplay = (elements) => {
-  const gameGrid = document.createElement("div");
-  gameGrid.classList.add("gameboard");
-  for (let i = 0; i < elements.length; i++) {
-    const gridRow = document.createElement("div");
-    gridRow.classList.add("ship-row");
-    for (let gridColumn of elements[i]) {
-      if (Object.keys(gridColumn.filled).length > 0) {
-        const filledCell = document.createElement("button");
-        filledCell.dataset.cellNo = `${gridColumn.row}${gridColumn.column}`;
-        filledCell.classList.add("ship-cell");
-        gridRow.append(filledCell);
-      } else {
-        const regularCell = document.createElement("button");
-        regularCell.dataset.cellNo = `${gridColumn.row}${gridColumn.column}`;
-        regularCell.classList.add("no-ship-cell");
-        gridRow.append(regularCell);
+export const GameDisplay = () => {
+  const playerBoard = (elements) => {
+    const gameGrid = document.createElement("div");
+    gameGrid.classList.add("gameboard-player");
+    for (let i = 0; i < elements.length; i++) {
+      const gridRow = document.createElement("div");
+      gridRow.classList.add("ship-row");
+      for (let gridColumn of elements[i]) {
+        if (Object.keys(gridColumn.filled).length > 0) {
+          const filledCell = document.createElement("button");
+          filledCell.dataset.cellNo = `${gridColumn.row}${gridColumn.column}`;
+          filledCell.classList.add("ship-cell");
+          filledCell.classList.add("ship-filled");
+          gridRow.append(filledCell);
+        } else {
+          const regularCell = document.createElement("button");
+          regularCell.dataset.cellNo = `${gridColumn.row}${gridColumn.column}`;
+          regularCell.classList.add("no-ship-cell");
+          gridRow.append(regularCell);
+        }
       }
+      gameGrid.append(gridRow);
     }
-    gameGrid.append(gridRow);
+
+    return gameGrid;
   }
 
-  return gameGrid;
+  const computerBoard = (elements) => {
+    const gameGrid = document.createElement("div");
+    gameGrid.classList.add("gameboard-computer");
+    for (let i = 0; i < elements.length; i++) {
+      const gridRow = document.createElement("div");
+      gridRow.classList.add("ship-row");
+      for (let gridColumn of elements[i]) {
+        if (Object.keys(gridColumn.filled).length > 0) {
+          const filledCell = document.createElement("button");
+          filledCell.dataset.cellNo = `${gridColumn.row}${gridColumn.column}`;
+          filledCell.classList.add("ship-cell");
+          gridRow.append(filledCell);
+        } else {
+          const regularCell = document.createElement("button");
+          regularCell.dataset.cellNo = `${gridColumn.row}${gridColumn.column}`;
+          regularCell.classList.add("no-ship-cell");
+          gridRow.append(regularCell);
+        }
+      }
+      gameGrid.append(gridRow);
+    }
+
+    return gameGrid;
+  }
+  return{playerBoard, computerBoard}
 };
 
-export const displayControls = (callback) => {
-  const gameBoard = document.querySelector(".gameboard");
+export function displayControls(callback) {
+  // new Promise((resolve, reject) => {
+    
+  // })
+  const gameBoard = document.querySelector(".gameboard-computer");
 
   gameBoard.onclick =function(event){
     if (event.target.tagName === "BUTTON") {
@@ -32,7 +64,6 @@ export const displayControls = (callback) => {
       const diagonalCell = callback(~~cellNumber[0], ~~cellNumber[1]);
       if (diagonalCell) {
         if (event.target.classList.contains("ship-cell")) {
-          //event.target.classList.remove('ship-cell')
           event.target.classList.add("ship-cell-hit");
           console.log({ diagonalCell });
           if (diagonalCell.length > 0) {
@@ -51,12 +82,10 @@ export const displayControls = (callback) => {
           }
           return true;
         } else if (event.target.classList.contains("no-ship-cell")) {
-          //event.target.classList.remove("no-ship-cell");
           const played = document.createElement("span");
           played.classList.add("no-ship-cell-hit");
           event.target.append(played);
           return false;
-          //event.target.classList.add("no-ship-cell-hit");
         }
       }
     }
@@ -64,7 +93,7 @@ export const displayControls = (callback) => {
 };
 
 export const displayControlsComputer = (value, callback) => {
-  const compChosenCell = document.querySelector(`[data-cell-no = '${value}']`);
+  const compChosenCell = document.querySelector(`.gameboard-player [data-cell-no = '${value}']`);
   if (compChosenCell) {
     const splitValue = value.split("");
     if (callback(~~splitValue[0], ~~splitValue[1])) {

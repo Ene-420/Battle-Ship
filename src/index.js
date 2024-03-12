@@ -1,5 +1,5 @@
 import { GameDisplay, displayControls } from '../loader/display'
-import { screen } from '../loader/screen'
+import { screen } from '../loader/screen.js'
 import { GameBoard } from '../obj/gameboard'
 import './style.css'
 
@@ -16,4 +16,17 @@ import './style.css'
 
 
 // displayControls(gameBoard.receiveAttack)
-screen().play()
+let screenPlayer = screen()
+
+const computerGameboard = document.querySelector('.gameboard-computer')
+
+function clickHandler(e) {
+    let cellNo = e.target.dataset.cellNo
+    screenPlayer.play(cellNo);
+}
+
+computerGameboard.onclick = clickHandler
+
+
+
+

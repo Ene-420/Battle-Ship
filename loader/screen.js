@@ -1,28 +1,33 @@
-import { Computer, Player } from "../obj/player";
+import { Computer, Player } from "../obj/player.js";
 import {
   GameDisplay,
   displayControls,
   displayControlsComputer,
-} from "./display";
-import { GameBoard } from "../obj/gameboard";
+} from "./display.js";
+import { GameBoard } from "../obj/gameboard.js";
 
 export const screen = () => {
-  function play() {
-    const { computerGameboard, playerGameBoard } = init();
+  const { computerGameboard, playerGameBoard } = init();
+  let { currentPlayer, switchCurrentPlayer } = switchPlay();
+  function play(value) {
+    
 
-    let { currentPlayer, switchCurrentPlayer } = switchPlay();
+    
     let shipStatus = false;
     //const {switchCurrentPlayer} = switchPlay
-    while (!shipStatus) {
+    //    while (!shipStatus) {
+    console.log({currentPlayer})
       if (currentPlayer.player === "Human") {
-        const hasPlayerPlayed = displayControls(
+        const hasPlayerPlayed = displayControls(value,
           computerGameboard.receiveAttack,
         );
         if (hasPlayerPlayed) {
-          shipStatus = computerGameboard.checkSunkenShips()
-        } else if (hasPlayerPlayed === false)
+          shipStatus = computerGameboard.checkSunkenShips();
+        } else if(!hasPlayerPlayed){
           currentPlayer = switchCurrentPlayer();
-      } else if (currentPlayer.player === "Computer") {
+          console.log({ currentPlayer });
+        }
+      } if (currentPlayer.player === "Computer") {
         let { row, column } = currentPlayer.makePlay();
         if (
           displayControlsComputer(
@@ -34,7 +39,7 @@ export const screen = () => {
           //currentPlayer = switchCurrentPlayer()
         } else currentPlayer = switchCurrentPlayer();
       }
-    }
+//    }
       
   }
 

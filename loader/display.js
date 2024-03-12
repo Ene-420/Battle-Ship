@@ -1,5 +1,5 @@
 export const GameDisplay = () => {
-  
+
   const playerBoard = (elements) => {
     const gameGrid = document.createElement("div");
     gameGrid.classList.add("gameboard-player");
@@ -53,22 +53,25 @@ export const GameDisplay = () => {
   return { playerBoard,  computerBoard};
 };
 
-export const displayControls = (callback) => {
-  const gameBoard = document.querySelector(".gameboard-computer");
+export const displayControls = (value, callback) => {
+  //const gameBoard = document.querySelector('.gameboard-computer')
+  const computerGameBoard = document.querySelector(
+    `.gameboard-computer [data-cell-no = '${value}']`,
+  );
 
-  gameBoard.onclick = function (event) {
-    if (event.target.tagName === "BUTTON") {
-      let cellNumber = event.target.dataset.cellNo.split("");
+  if(computerGameBoard) {
+    //if (gameBoard.tagName === "BUTTON") {
+      let cellNumber = value.split("");
       const diagonalCell = callback(~~cellNumber[0], ~~cellNumber[1]);
       if (diagonalCell) {
-        if (event.target.classList.contains("ship-cell")) {
-          event.target.classList.add("ship-cell-hit");
+        if (computerGameBoard.classList.contains("ship-cell")) {
+          computerGameBoard.classList.add("ship-cell-hit");
           console.log({ diagonalCell });
           if (diagonalCell.length > 0) {
             console.log({ diagonalCell });
             for (let cell of diagonalCell) {
-              let emptyDiagonalCell = gameBoard.querySelector(
-                `[data-cell-no = '${cell[0]}${cell[1]}']`,
+              let emptyDiagonalCell = document.querySelector(
+                `gameboard-computer [data-cell-no = '${cell[0]}${cell[1]}']`,
               );
               console.log({ emptyDiagonalCell });
               if (emptyDiagonalCell) {
@@ -79,14 +82,14 @@ export const displayControls = (callback) => {
             }
           }
           return true;
-        } else if (event.target.classList.contains("no-ship-cell")) {
+        } else if (computerGameBoard.classList.contains("no-ship-cell")) {
           const played = document.createElement("span");
           played.classList.add("no-ship-cell-hit");
-          event.target.append(played);
+          computerGameBoard.append(played);
           return false;
         }
       }
-    }
+    //}
   };
 };
 

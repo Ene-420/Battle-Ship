@@ -1,14 +1,14 @@
 export class Player {
   constructor(name) {
     this.name = name;
-    this.player = 'Human';
+    this.player = "Human";
   }
 }
 
 export class Computer {
   plays = [];
   constructor(name) {
-    this.name = name
+    this.name = name;
     this.player = "Computer";
   }
 

@@ -35,13 +35,12 @@ export const GameBoard = () => {
         let shipDirection = getRandomNumber(0, 2);
         // vertical = 1, horiozntal = 0
         let newCell = cellCheck(cell);
-        //console.log({newCell})
         if (shipDirection === 1) {
           let foundSpace = checkForPerfectFitVertical(newCell, ship);
           let { row, column } = foundSpace;
           let newShip = new Ship([row, column], ship.length, "vertical");
-          //console.log({foundSpace})
           for (let i = 0; i < ship.length; i++) {
+            console.log({ row, column });
             grid[row][column].filled = newShip;
             adjacentCells.push([row, column]);
             filledCells.push(grid[row][column]);
@@ -51,9 +50,8 @@ export const GameBoard = () => {
           let foundSpace = checkForPerfectFitHorizontal(newCell, ship);
           let { row, column } = foundSpace;
           let newShip = new Ship([row, column], ship.length, "horizontal");
-          //console.log({ foundSpace });
           for (let i = 0; i < ship.length; i++) {
-            //console.log({foundSpace})
+            console.log({row, column})
             grid[row][column].filled = newShip;
             adjacentCells.push([row, column]);
             filledCells.push(grid[row][column]);

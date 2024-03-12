@@ -1,4 +1,5 @@
 export const GameDisplay = () => {
+  
   const playerBoard = (elements) => {
     const gameGrid = document.createElement("div");
     gameGrid.classList.add("gameboard-player");
@@ -23,7 +24,7 @@ export const GameDisplay = () => {
     }
 
     return gameGrid;
-  }
+  };
 
   const computerBoard = (elements) => {
     const gameGrid = document.createElement("div");
@@ -48,17 +49,14 @@ export const GameDisplay = () => {
     }
 
     return gameGrid;
-  }
-  return{playerBoard, computerBoard}
+  };
+  return { playerBoard,  computerBoard};
 };
 
-export function displayControls(callback) {
-  // new Promise((resolve, reject) => {
-    
-  // })
+export const displayControls = (callback) => {
   const gameBoard = document.querySelector(".gameboard-computer");
 
-  gameBoard.onclick =function(event){
+  gameBoard.onclick = function (event) {
     if (event.target.tagName === "BUTTON") {
       let cellNumber = event.target.dataset.cellNo.split("");
       const diagonalCell = callback(~~cellNumber[0], ~~cellNumber[1]);
@@ -93,7 +91,9 @@ export function displayControls(callback) {
 };
 
 export const displayControlsComputer = (value, callback) => {
-  const compChosenCell = document.querySelector(`.gameboard-player [data-cell-no = '${value}']`);
+  const compChosenCell = document.querySelector(
+    `.gameboard-player [data-cell-no = '${value}']`,
+  );
   if (compChosenCell) {
     const splitValue = value.split("");
     if (callback(~~splitValue[0], ~~splitValue[1])) {

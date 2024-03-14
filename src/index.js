@@ -21,7 +21,9 @@ let screenPlayer = screen()
 const computerGameboard = document.querySelector('.gameboard-computer')
 
 function clickHandler(e) {
+    console.log({e})
     let cellNo = e.target.dataset.cellNo
+    console.log({cellNo})
     screenPlayer.play(cellNo);
 }
 

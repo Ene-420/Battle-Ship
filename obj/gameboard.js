@@ -120,7 +120,7 @@ export const GameBoard = () => {
   }
   function receiveAttack(row, column) {
     const cell = grid[row][column];
-    console.log({ cell });
+    //console.log({ cell });
 
     if (!cellState(row, column)) {
       let attackedShip = cell.filled;
@@ -397,6 +397,7 @@ export const GameBoard = () => {
     findHorizontalAdjacentCells,
     placeShip,
     findDiagonals,
+    getRandomNumber,
   };
 };
 

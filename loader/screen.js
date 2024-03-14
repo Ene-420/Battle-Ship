@@ -9,38 +9,74 @@ import { GameBoard } from "../obj/gameboard.js";
 export const screen = () => {
   const { computerGameboard, playerGameBoard } = init();
   let { currentPlayer, switchCurrentPlayer } = switchPlay();
-  function play(value) {
-    
 
-    
+  function play(value) {
     let shipStatus = false;
-    //const {switchCurrentPlayer} = switchPlay
-    //    while (!shipStatus) {
-    console.log({currentPlayer})
-      if (currentPlayer.player === "Human") {
-        const hasPlayerPlayed = displayControls(value,
-          computerGameboard.receiveAttack,
-        );
-        if (hasPlayerPlayed) {
-          shipStatus = computerGameboard.checkSunkenShips();
-        } else if(!hasPlayerPlayed){
-          currentPlayer = switchCurrentPlayer();
-          console.log({ currentPlayer });
-        }
-      } if (currentPlayer.player === "Computer") {
-        let { row, column } = currentPlayer.makePlay();
-        if (
-          displayControlsComputer(
-            `${row}${column}`,
-            playerGameBoard.receiveAttack,
-          )
-        ) {
-          shipStatus = playerGameBoard.checkSunkenShips()
-          //currentPlayer = switchCurrentPlayer()
-        } else currentPlayer = switchCurrentPlayer();
+
+    console.log({ currentPlayer });
+    if (currentPlayer.player === "Human") {
+      let hasPlayerPlayed = displayControls(
+        value,
+        computerGameboard.receiveAttack,
+      );
+      console.log({ hasPlayerPlayed });
+      if (hasPlayerPlayed) {
+        shipStatus = computerGameboard.checkSunkenShips();
+      } else if (hasPlayerPlayed === false && hasPlayerPlayed !== null) {
+        currentPlayer = switchCurrentPlayer();
+        console.log({ currentPlayer });
       }
-//    }
-      
+    }
+    if (currentPlayer.player === "Computer") {
+      let { row, column } = currentPlayer.makePlay();
+      let playAgain = displayControlsComputer(
+        `${row}${column}`,
+        playerGameBoard.receiveAttack,
+      );
+      if (playAgain === true) {
+        let canPlayAgain = true;
+        while (canPlayAgain === true) {
+          let computerPlay = anotherChance(row, column)
+          const outcome = displayControlsComputer(
+            `${computerPlay[0]}${computerPlay[1]}`,
+            playerGameBoard.receiveAttack,
+          );
+          playAgain = outcome
+          canPlayAgain = outcome
+          row = computerPlay[0], column = computerPlay[1]
+        }
+        shipStatus = playerGameBoard.checkSunkenShips();
+        //play();
+        //currentPlayer = switchCurrentPlayer()
+      } if (playAgain==="try again") play();
+      else currentPlayer = switchCurrentPlayer();
+    }
+    //    }
+  }
+
+  function anotherChance(row,column) {
+    const possiblePlays = [1, -1]
+    const possibledirection = computerGameboard.getRandomNumber(0, 2)
+    const playMovement = computerGameboard.getRandomNumber(0, 2);
+
+    //row -> 0, column -> 1
+    if (possibledirection === 0) {
+      if (
+        row + possiblePlays[playMovement] > 0 &&
+        row + possiblePlays[playMovement]
+       <10)
+        return [row + possiblePlays[playMovement], column];
+      else return anotherChance(row, column)
+    }
+
+    else {
+      if (
+        column + possiblePlays[playMovement] > 0 &&
+        column + possiblePlays[playMovement]
+      < 10)
+        return [row, column + possiblePlays[playMovement]];
+      else return anotherChance(row,column)
+    }
   }
 
   function init() {
@@ -48,7 +84,7 @@ export const screen = () => {
     const content = document.createElement("main");
     const { playerBoard, computerBoard } = GameDisplay();
     body.append(content);
-    let playerGameBoard = GameBoard()
+    let playerGameBoard = GameBoard();
     let computerGameboard = GameBoard();
     playerGameBoard.placeShip();
     computerGameboard.placeShip();

@@ -1,5 +1,4 @@
 export const GameDisplay = () => {
-
   const playerBoard = (elements) => {
     const gameGrid = document.createElement("div");
     gameGrid.classList.add("gameboard-player");
@@ -50,65 +49,107 @@ export const GameDisplay = () => {
 
     return gameGrid;
   };
-  return { playerBoard,  computerBoard};
+  return { playerBoard, computerBoard };
 };
 
 export const displayControls = (value, callback) => {
   //const gameBoard = document.querySelector('.gameboard-computer')
   const computerGameBoard = document.querySelector(
-    `.gameboard-computer [data-cell-no = '${value}']`,
+    `.gameboard-computer> .ship-row> button[data-cell-no = '${value}']`,
   );
 
-  if(computerGameBoard) {
-    //if (gameBoard.tagName === "BUTTON") {
+  if (computerGameBoard) {
+    if (computerGameBoard.classList.contains("hit")) {
+      return null;
+    } else {
       let cellNumber = value.split("");
-      const diagonalCell = callback(~~cellNumber[0], ~~cellNumber[1]);
-      if (diagonalCell) {
-        if (computerGameBoard.classList.contains("ship-cell")) {
+      const response = callback(~~cellNumber[0], ~~cellNumber[1]);
+      if (Array.isArray(response)) {
+        if (computerGameBoard.matches(".ship-cell")) {
+          //computerGameBoard.disabled = true;
           computerGameBoard.classList.add("ship-cell-hit");
-          console.log({ diagonalCell });
-          if (diagonalCell.length > 0) {
-            console.log({ diagonalCell });
-            for (let cell of diagonalCell) {
+          computerGameBoard.classList.add("hit");
+
+          //console.log({ diagonalCell });
+          if (response.length > 0) {
+            console.log({ response });
+            for (let cell of response) {
               let emptyDiagonalCell = document.querySelector(
-                `gameboard-computer [data-cell-no = '${cell[0]}${cell[1]}']`,
+                `.gameboard-computer [data-cell-no = '${cell[0]}${cell[1]}']`,
               );
               console.log({ emptyDiagonalCell });
               if (emptyDiagonalCell) {
                 const border = document.createElement("span");
+                //emptyDiagonalCell.disabled = true;
                 border.classList.add("no-ship-border-cell-hit");
                 emptyDiagonalCell.append(border);
+                emptyDiagonalCell.classList.add("hit");
               }
             }
           }
           return true;
-        } else if (computerGameBoard.classList.contains("no-ship-cell")) {
+        }
+      } else if (response === true) {
+        if (computerGameBoard.matches(".no-ship-cell")) {
           const played = document.createElement("span");
           played.classList.add("no-ship-cell-hit");
           computerGameBoard.append(played);
+          computerGameBoard.classList.add("hit");
+          //computerGameBoard.disabled = true
           return false;
         }
       }
-    //}
-  };
+    }
+  }
 };
 
 export const displayControlsComputer = (value, callback) => {
   const compChosenCell = document.querySelector(
     `.gameboard-player [data-cell-no = '${value}']`,
   );
-  if (compChosenCell) {
-    const splitValue = value.split("");
-    if (callback(~~splitValue[0], ~~splitValue[1])) {
-      if (compChosenCell.classList.contains("ship-cell")) {
-        compChosenCell.classList.add("ship-cell-hit");
-        return true;
-      } else if (compChosenCell.classList.contains("no-ship-cell")) {
-        const played = document.createElement("span");
-        played.classList.add("no-ship-cell-hit");
-        compChosenCell.append(played);
-        return false;
-      }
-    }
+  if (compChosenCell.classList.contains('hit')) {
+    return 'try again'
   }
+  else {
+      if (compChosenCell) {
+        const splitValue = value.split("");
+        const response = callback(~~splitValue[0], ~~splitValue[1]);
+        if (Array.isArray(response)) {
+          if (compChosenCell.matches(".ship-cell")) {
+            //computerGameBoard.disabled = true;
+            compChosenCell.classList.add("ship-cell-hit");
+            compChosenCell.classList.add("hit");
+
+            //console.log({ diagonalCell });
+            if (response.length > 0) {
+              console.log({ response });
+              for (let cell of response) {
+                let emptyDiagonalCell = document.querySelector(
+                  `.gameboard-player [data-cell-no = '${cell[0]}${cell[1]}']`,
+                );
+                console.log({ emptyDiagonalCell });
+                if (emptyDiagonalCell) {
+                  const border = document.createElement("span");
+                  //emptyDiagonalCell.disabled = true;
+                  border.classList.add("no-ship-border-cell-hit");
+                  emptyDiagonalCell.append(border);
+                  emptyDiagonalCell.classList.add("hit");
+                }
+              }
+            }
+            return true;
+          }
+        } else if (response === true) {
+          if (compChosenCell.matches(".no-ship-cell")) {
+            const played = document.createElement("span");
+            played.classList.add("no-ship-cell-hit");
+            compChosenCell.append(played);
+            compChosenCell.classList.add("hit");
+            //computerGameBoard.disabled = true
+            return false;
+          }
+        }
+      }
+  }
+
 };

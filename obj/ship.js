@@ -8,17 +8,6 @@ export default class Ship {
     this.direction = direction;
   }
 
-  append(value) {
-    if (!this.head) {
-      this.head = Node(value);
-    }
-    let next = this.head;
-    while (next.nextNode !== null) {
-      next = next.nextNode;
-    }
-    return next.nextNode = new Node(value);
-
-  }
 
   getHead() {
     return this.head;

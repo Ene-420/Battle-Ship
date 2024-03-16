@@ -9,22 +9,25 @@ import { GameBoard } from "../obj/gameboard.js";
 export const screen = () => {
   const { computerGameboard, playerGameBoard } = init();
   let { currentPlayer, switchCurrentPlayer } = switchPlay();
+  const playerGrid = document.querySelector('.gameboard-player')
+  const computerGrid = document.querySelector(".gameboard-computer");
 
   function play(value) {
     let shipStatus = false;
 
-    console.log({ currentPlayer });
+    //console.log({ currentPlayer });
     if (currentPlayer.player === "Human") {
+      
       let hasPlayerPlayed = displayControls(
         value,
         computerGameboard.receiveAttack,
       );
-      console.log({ hasPlayerPlayed });
+      //console.log({ hasPlayerPlayed });
       if (hasPlayerPlayed) {
         shipStatus = computerGameboard.checkSunkenShips();
       } else if (hasPlayerPlayed === false && hasPlayerPlayed !== null) {
         currentPlayer = switchCurrentPlayer();
-        console.log({ currentPlayer });
+        //console.log({ currentPlayer });
       }
     }
     if (currentPlayer.player === "Computer") {
